@@ -2,7 +2,7 @@
 
 namespace EcommerceApp.Model
 {
-    public class Item
+    public class Item : Base
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
@@ -11,5 +11,9 @@ namespace EcommerceApp.Model
 
         public int OrderId { get; set; }
         public Order? Order { get; set; }
+
+        public int InventoryId { get; set; }
+        public Inventory? Inventory { get; set; }
+        
     }
 }

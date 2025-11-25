@@ -1,6 +1,13 @@
 ﻿namespace EcommerceApp.Model
 {
-    public class UserAddress
+    public class Address : Base
     {
+        public string Street { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public string State { get; set; } = string.Empty;
+        public string PostalCode { get; set; } = string.Empty;
+        public string Country { get; set; } = string.Empty;
+        
+        public ICollection<User>? Users { get; set; }
     }
 }
