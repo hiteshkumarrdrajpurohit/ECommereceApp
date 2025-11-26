@@ -33,7 +33,8 @@ namespace EcommerceApp.Controllers
             _dbContext.SaveChanges();
 
             return Ok(new { message= "Registered successfully",
-                            userName=});
+                            userName=user.FirstName
+                          });
 
         }
 
