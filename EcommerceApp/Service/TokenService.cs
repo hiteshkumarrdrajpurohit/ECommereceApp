@@ -28,12 +28,12 @@ namespace EcommerceApp.Service
 
             var claims = new List<Claim>
         {
+            
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
-            new Claim("given_name", user.FirstName ?? string.Empty),
-            new Claim("role", user.Role.ToString()) // if you use roles enum
+            new Claim( JwtRegisteredClaimNames.Name, user.FirstName ?? string.Empty),
+            new Claim(ClaimTypes.Role, user.Role.ToString()) // if you use roles enum
         };
-
 
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var credentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);

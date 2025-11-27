@@ -1,70 +1,76 @@
 ﻿using EcommerceApp.Database;
 using EcommerceApp.DTO;
 using EcommerceApp.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace EcommerceApp.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "Customer,Admin,Seller,Guest")]
     [Route("[controller]")]
+
     public class UserController : ControllerBase
     {  
         private  readonly ApplicationDbContext _dbContext;
         private readonly PasswordHasher<User> _passwordHasher =new PasswordHasher<User>();
+
 
         public UserController(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-
-        [HttpPost("register")]
-        public IActionResult Register( User user)
+        [HttpPost("changePassword")]
+        public IActionResult ChangePassword(ChangePasswordDTO dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            user.PasswordHash=_passwordHasher.HashPassword(null, user.PasswordHash);
-           
-            _dbContext.Users.Add(user);
+            if (userId == null) return Unauthorized();
+
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            
+            if(user == null) return Unauthorized();
+
+            var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash,dto.CurrentPassword);
+
+            if(verificationResult == PasswordVerificationResult.Failed) return BadRequest(new{
+                
+                message= "Current password is incorrect."
+            });
+
+            user.PasswordHash = _passwordHasher.HashPassword(user, dto.NewPassword);
             _dbContext.SaveChanges();
 
-            return Ok(new { message= "Registered successfully",
-                            userName=user.FirstName
-                          });
-
-        }
-
-        [HttpPost("login")]
-        public IActionResult Login(LoginDTO loginDto)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            // 1. Find user by email only
-            var user = _dbContext.Users.FirstOrDefault(u => u.Email == loginDto.Email);
-            if (user == null)
-                return Unauthorized(new { message = "Invalid credentials" });
-
-            // 2. Verify password using PasswordHasher
-            var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, loginDto.Password);
-
-            if (result == PasswordVerificationResult.Success ||
-                result == PasswordVerificationResult.SuccessRehashNeeded)
+            return Ok(new   
             {
-                return Ok(new
-                {
-                    message = "Login successful",
-                    userName = user.FirstName,
-                    email = user.Email
-                });
-            }
-
-            return Unauthorized(new { message = "Invalid credentials" });
+                Message = "Password changed successfully.",
+                userId = user.Id
+            });
         }
+
+        [HttpGet("profile")]
+        public IActionResult GetProfile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return Unauthorized();
+
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            if(user == null) return Unauthorized();
+            return Ok(
+                new {
+                   firstName = user.FirstName,
+                   lastName =user.LastName,
+                   email = user.Email,
+                   phoneNumber = user.PhoneNumber
+
+                });
+
+        }
+
 
     }
 }

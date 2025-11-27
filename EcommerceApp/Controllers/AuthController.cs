@@ -38,9 +38,6 @@ namespace EcommerceApp.Controllers
             user.Email = dto.Email;
             user.Role = dto.Role;
             user.PhoneNumber = dto.PhoneNumber;
-            user.PasswordHash = dto.Password;
-
-
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
 
             _dbContext.Users.Add(user);
@@ -65,16 +62,13 @@ namespace EcommerceApp.Controllers
 
             if(result == PasswordVerificationResult.Failed) return Unauthorized(new { message = "Invalid email or password" });
 
-
-
             var token = _tokenService.CreateToken(user);
 
             return Ok(new
             {
-                message = "Login successfull",
+                message = "Login successful",
                 accessToken = token,
-                tokenType = "Bearer",
-
+                expiration = DateTime.UtcNow.AddHours(1).ToString("o")  
             });
         }
 
