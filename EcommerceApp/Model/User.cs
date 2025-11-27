@@ -1,14 +1,22 @@
 ﻿using EcommerceApp.Enum;
+using System.ComponentModel.DataAnnotations;
 
 namespace EcommerceApp.Model
 {
     public class User: Base
     {
+        [Required]
        public UserRole Role { get; set; } = UserRole.Customer;
+        [Required] 
+        
         public string FirstName { get; set; }
+        [Required]
         public string LastName { get; set; }
+        [Required]
         public string Email { get; set; }
+        [Required]
         public string PasswordHash { get; set; }= string.Empty;
+        [Required]
         public string? PhoneNumber { get; set; }
 
         //Navigation
