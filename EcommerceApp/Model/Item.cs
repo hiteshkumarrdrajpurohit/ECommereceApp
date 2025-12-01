@@ -9,9 +9,6 @@ namespace EcommerceApp.Model
         public decimal Price { get; set; }
         public ItemCategory Category { get; set; } = ItemCategory.Electronics;
 
-        public int OrderId { get; set; }
-        public Order? Order { get; set; }
-
         public int InventoryId { get; set; }
         public Inventory? Inventory { get; set; }
         

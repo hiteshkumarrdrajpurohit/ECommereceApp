@@ -33,12 +33,19 @@ namespace EcommerceApp.Database
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId);
 
-            // ORDER → ITEM (1:M)
-            modelBuilder.Entity<Item>()
-                .HasOne(i => i.Order)
-                .WithMany(o => o.Items)
-                .HasForeignKey(i => i.OrderId);
+            // ORDER → ORDER ITEM QUANTITY (1 : M)
 
+            modelBuilder.Entity<Order>()
+                .HasMany(o => o.OrderItemQuantity)
+                .WithOne(oiq => oiq.Order)
+                .HasForeignKey(oiq => oiq.OrderId);
+
+            // ITEM → ORDER ITEM QUANTITY (1 : M)
+            modelBuilder.Entity<OrderItemQuantity>()
+              .HasOne(oiq => oiq.Item)
+              .WithMany()
+              .HasForeignKey(oiq => oiq.ItemId);
+       
             // ITEM → INVENTORY (1:1)
             modelBuilder.Entity<Inventory>()
                 .HasOne(inv => inv.Item)

@@ -14,9 +14,13 @@ namespace EcommerceApp
 
             var jwtConfig = builder.Configuration.GetSection("Jwt");
             var key = jwtConfig["Key"];
-            //// Add services to the container.
-            //            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            //builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            //   options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Add services to the container.
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddAuthentication(options =>
             {
@@ -45,8 +49,7 @@ namespace EcommerceApp
 
             builder.Services.AddSingleton<ITokenService, TokenService>();
 
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+           
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

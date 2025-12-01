@@ -21,26 +21,7 @@ namespace EcommerceApp.Controllers
             _dbContext = dbContext;
         }
 
-        [HttpPost("add")]
-        public IActionResult AddInventory([FromBody] InventoryDto inventoryDto)
-        {
-            var item = _dbContext.Inventories.FirstOrDefault(i => i.ItemId == inventoryDto.ItemId);
-
-            if (item==null) return Ok("item does not exist ");
-
-            var inventory = new Inventory
-            {
-                ItemId = inventoryDto.ItemId,
-                QuantityAvailable = inventoryDto.QuantityAvailable,
-                QuantityReserved = inventoryDto.QuantityReserved,
-                QuantitySold = inventoryDto.QuantitySold,
-                LowStockThreshold = inventoryDto.LowStockThreshold,
-                Status = inventoryDto.Status
-            };
-            _dbContext.Inventories.Add(inventory);
-            _dbContext.SaveChanges();
-            return Ok("Inventory item added successfully");
-        }
+       
 
         [HttpPut("update")]
         public IActionResult UpdateInventory([FromBody] InventoryDto inventoryDto)
