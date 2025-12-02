@@ -12,6 +12,8 @@
 # Ignore logs
 *.log
 
+EcommerceApp.Database/Migrations/
+
 # Ignore NuGet packages
 *.nupkg
 packages/
