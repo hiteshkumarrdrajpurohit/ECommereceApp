@@ -35,7 +35,8 @@
         Books,
         Toys,
         Sports,
-        Beauty
+        Beauty,
+        General
     }
 
     public enum UserRole

@@ -1,7 +1,7 @@
 ﻿using EcommerceApp.Model;
 using Microsoft.EntityFrameworkCore;
-    
-namespace EcommerceApp.Database
+
+namespace EcommerceApp
 {
     public class ApplicationDbContext : DbContext
     {
@@ -47,9 +47,9 @@ namespace EcommerceApp.Database
               .HasForeignKey(oiq => oiq.ItemId);
        
             // ITEM → INVENTORY (1:1)
-            modelBuilder.Entity<Inventory>()
-                .HasOne(inv => inv.Item)
-                .WithOne(i => i.Inventory)
+            modelBuilder.Entity<Item>()
+                .HasOne(i => i.Inventory)
+                .WithOne(inv => inv.Item)
                 .HasForeignKey<Inventory>(inv => inv.ItemId);
 
             // ORDER → TRANSACTION (1:M)

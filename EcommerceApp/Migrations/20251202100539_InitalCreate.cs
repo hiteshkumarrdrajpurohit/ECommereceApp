@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EcommerceApp.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitalCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,7 +41,7 @@ namespace EcommerceApp.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Category = table.Column<int>(type: "int", nullable: false),
-                    InventoryId = table.Column<int>(type: "int", nullable: false),
+                    InventoryId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
@@ -109,7 +109,6 @@ namespace EcommerceApp.Migrations
                     TotalAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     ShippingAddressId = table.Column<int>(type: "int", nullable: false),
-                    TransactionId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)

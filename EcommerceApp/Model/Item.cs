@@ -7,9 +7,9 @@ namespace EcommerceApp.Model
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; }
-        public ItemCategory Category { get; set; } = ItemCategory.Electronics;
+        public ItemCategory Category { get; set; } = ItemCategory.General;
 
-        public int InventoryId { get; set; }
+        public int? InventoryId { get; set; }
         public Inventory? Inventory { get; set; }
         
     }

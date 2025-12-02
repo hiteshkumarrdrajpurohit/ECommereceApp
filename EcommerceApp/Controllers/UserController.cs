@@ -1,5 +1,4 @@
-﻿using EcommerceApp.Database;
-using EcommerceApp.DTO;
+﻿using EcommerceApp.DTO;
 using EcommerceApp.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -31,7 +30,7 @@ namespace EcommerceApp.Controllers
 
             if (userId == null) return Unauthorized();
 
-            var user = _dbContext.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id.ToString() == userId && u.IsActive ==true);
             
             if(user == null) return Unauthorized();
 
@@ -58,8 +57,8 @@ namespace EcommerceApp.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null) return Unauthorized();
 
-            var user = _dbContext.Users.FirstOrDefault(u => u.Id.ToString() == userId);
-            if(user == null) return Unauthorized();
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id.ToString() == userId && u.IsActive == true);
+            if(user == null) return Unauthorized("User Not found");
             return Ok(
                 new {
                    firstName = user.FirstName,
