@@ -1,5 +1,4 @@
-﻿using EcommerceApp.Database;
-using EcommerceApp.DTO;
+﻿using EcommerceApp.DTO;
 using EcommerceApp.Enum;
 using EcommerceApp.Model;
 using EcommerceApp.Service;
@@ -29,8 +28,24 @@ namespace EcommerceApp.Controllers
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
 
-            if (_dbContext.Users.Any(u => u.Email == dto.Email)) return Conflict(new { message = "Email already registred " });
-
+            if (_dbContext.Users.Any(u => u.Email == dto.Email && u.IsActive == true)) return Conflict(new { message = "Email already registred " });
+            if(_dbContext.Users.Any(u => u.Email == dto.Email && u.IsActive == false))
+            {
+                var existingUser = _dbContext.Users.Single(u => u.Email == dto.Email && u.IsActive == false);
+                existingUser.IsActive = true;
+                existingUser.FirstName = dto.FirstName;
+                existingUser.LastName = dto.LastName;
+                existingUser.Role = dto.Role;
+                existingUser.PhoneNumber = dto.PhoneNumber;
+                existingUser.PasswordHash = _passwordHasher.HashPassword(existingUser, dto.Password);
+                _dbContext.SaveChanges();
+                return Ok(new
+                {
+                    message = "User registered successfully",
+                    UserName = existingUser.FirstName,
+                    UserId = existingUser.Id,
+                });
+            }
             var user = new User();
 
             user.FirstName = dto.FirstName;
@@ -55,7 +70,7 @@ namespace EcommerceApp.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = _dbContext.Users.SingleOrDefault(u => u.Email == dto.Email);
+            var user = _dbContext.Users.SingleOrDefault(u => u.Email == dto.Email && u.IsActive==true);
             if (user == null) return Unauthorized(new { message = "Invalid email or password" });
 
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);

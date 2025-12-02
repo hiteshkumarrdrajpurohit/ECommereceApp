@@ -1,5 +1,4 @@
-﻿using EcommerceApp.Database;
-using EcommerceApp.DTO;
+﻿using EcommerceApp.DTO;
 using EcommerceApp.Model;
 using EcommerceApp.Shared.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -21,8 +20,6 @@ namespace EcommerceApp.Controllers
             _dbContext = dbContext;
         }
 
-       
-
         [HttpPut("update")]
         public IActionResult UpdateInventory([FromBody] InventoryDto inventoryDto)
         {
@@ -33,6 +30,7 @@ namespace EcommerceApp.Controllers
             inventory.QuantitySold = inventoryDto.QuantitySold;
             inventory.LowStockThreshold = inventoryDto.LowStockThreshold;
             inventory.Status = inventoryDto.Status;
+            inventory.UpdatedAt= DateTime.UtcNow;
             _dbContext.SaveChanges();
             return Ok(new {
                 itemId= inventoryDto.ItemId,
@@ -43,7 +41,7 @@ namespace EcommerceApp.Controllers
         [HttpGet("{id}")]
         public IActionResult GetInvetoryByItemId(int id)
         {
-                     var inventory = _dbContext.Inventories.FirstOrDefault( i => i.ItemId == id);
+                     var inventory = _dbContext.Inventories.FirstOrDefault( i => i.ItemId == id && i.IsActive==true);
             if (inventory == null) return NotFound("Inventory item not found");
 
             return Ok(new InventoryDto{ ItemId = id, 
@@ -61,6 +59,7 @@ namespace EcommerceApp.Controllers
           
            var query = _dbContext
                        .Inventories
+                       .Where(i => i.IsActive == true)
                        .AsNoTracking()
                        .OrderBy(i => i.ItemId);
             var pagedResult = await query.ToPagedResponseAsync(
@@ -78,17 +77,17 @@ namespace EcommerceApp.Controllers
             return Ok(pagedResult);
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult DeleteInventory(int id)
-        {
-            var inventory = _dbContext.Inventories.FirstOrDefault(i => i.ItemId == id);
-            if (inventory == null) return NotFound("Inventory item not found");
-            //_dbContext.Inventories.Remove(inventory);
-            //_dbContext.SaveChanges();
+        //[HttpDelete("delete/{id}")]
+        //public IActionResult DeleteInventory(int id)
+        //{
+        //    var inventory = _dbContext.Inventories.FirstOrDefault(i => i.ItemId == id);
+        //    if (inventory == null) return NotFound("Inventory item not found");
+        //    //_dbContext.Inventories.Remove(inventory);
+        //    //_dbContext.SaveChanges();
 
-            inventory.IsActive = false;
-            _dbContext.SaveChanges();
-            return Ok("Inventory item deleted successfully");
-        }
+        //    inventory.IsActive = false;
+        //    _dbContext.SaveChanges();
+        //    return Ok("Inventory item deleted successfully");
+        //}
     }
 }

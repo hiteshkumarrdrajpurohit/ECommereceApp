@@ -1,5 +1,4 @@
-﻿using EcommerceApp.Database;
-using EcommerceApp.Service;
+﻿using EcommerceApp.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
