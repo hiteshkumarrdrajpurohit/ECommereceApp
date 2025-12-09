@@ -31,7 +31,7 @@ namespace EcommerceApp
 
             // USER → ORDER (1:M)
             modelBuilder.Entity<Order>()
-                .HasOne(o => o.UserInfo)
+                .HasOne(o => o.User)
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId);
 
@@ -97,10 +97,7 @@ namespace EcommerceApp
                 .WithMany()
                 .HasForeignKey(ci => ci.ItemId);
 
-            // CARTITEM PRICE PRECISION
-            modelBuilder.Entity<CartItem>()
-                .Property(ci => ci.UnitPrice)
-                .HasPrecision(18, 2);
+            
         }
     }
 }
