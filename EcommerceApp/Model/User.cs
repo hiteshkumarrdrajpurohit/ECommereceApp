@@ -22,6 +22,6 @@ namespace EcommerceApp.Model
         //Navigation
         public ICollection<Order>? Orders { get; set; }
         public ICollection<Address>? Addresses { get; set; }
-
+        public Cart? Cart { get; set; }
     }
 }

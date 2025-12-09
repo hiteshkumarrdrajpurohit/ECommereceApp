@@ -16,6 +16,8 @@ namespace EcommerceApp
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,19 +35,18 @@ namespace EcommerceApp
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId);
 
-            // ORDER → ORDER ITEM QUANTITY (1 : M)
-
+            // ORDER → ORDER ITEM QUANTITY (1:M)
             modelBuilder.Entity<Order>()
                 .HasMany(o => o.OrderItemQuantity)
                 .WithOne(oiq => oiq.Order)
                 .HasForeignKey(oiq => oiq.OrderId);
 
-            // ITEM → ORDER ITEM QUANTITY (1 : M)
+            // ITEM → ORDER ITEM QUANTITY (1:M)
             modelBuilder.Entity<OrderItemQuantity>()
-              .HasOne(oiq => oiq.Item)
-              .WithMany()
-              .HasForeignKey(oiq => oiq.ItemId);
-       
+                .HasOne(oiq => oiq.Item)
+                .WithMany()
+                .HasForeignKey(oiq => oiq.ItemId);
+
             // ITEM → INVENTORY (1:1)
             modelBuilder.Entity<Item>()
                 .HasOne(i => i.Inventory)
@@ -64,13 +65,41 @@ namespace EcommerceApp
                 .WithMany()
                 .HasForeignKey(o => o.ShippingAddressId);
 
-
+            // PRICE PRECISION
             modelBuilder.Entity<Item>()
                 .Property(i => i.Price)
                 .HasPrecision(18, 2);
 
             modelBuilder.Entity<Order>()
                 .Property(o => o.TotalAmount)
+                .HasPrecision(18, 2);
+
+            
+            // USER ↔ CART (1:1)
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Cart)
+                .WithOne(c => c.User)
+                .HasForeignKey<Cart>(c => c.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Cart>()
+                        .HasKey(c => c.Id);
+            // CART → CARTITEM (1:M)
+            modelBuilder.Entity<Cart>()
+                .HasMany(c => c.Items)
+                .WithOne(ci => ci.Cart)
+                .HasForeignKey(ci => ci.CartId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // CARTITEM → ITEM (1:1)
+            modelBuilder.Entity<CartItem>()
+                .HasOne(ci => ci.Item)
+                .WithMany()
+                .HasForeignKey(ci => ci.ItemId);
+
+            // CARTITEM PRICE PRECISION
+            modelBuilder.Entity<CartItem>()
+                .Property(ci => ci.UnitPrice)
                 .HasPrecision(18, 2);
         }
     }
