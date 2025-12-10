@@ -1,7 +1,9 @@
 ﻿using EcommerceApp.DTO;
+using EcommerceApp.Enum;
 using EcommerceApp.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EcommerceApp.Controllers
 {
@@ -18,38 +20,34 @@ namespace EcommerceApp.Controllers
         [HttpPost("create")]
         public IActionResult CreateOrder([FromBody] OrderDTO dto)
         {
-            var userId = HttpContext.Items["UserId"]?.ToString();
-            var orderItems = new List<OrderItemQuantity>();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (userId == null) return Unauthorized();
+            var cart = _dbContext.Carts.FirstOrDefault( c => Convert.ToInt32(c.UserId) == Convert.ToInt32(userId) );
 
-            var user = _dbContext.Users.FirstOrDefault(u => u.Id.ToString() == userId && u.IsActive == true);
-
-            if (user == null) return Unauthorized();
+            if (cart ==null) return Unauthorized();
 
             var order = new Order
             {
-                User = user,
-                ShippingAddressId = dto.ShippingAddressId,
-                TotalAmount = dto.TotalAmount,
-                OrderItemQuantity = orderItems,
+                UserId=Convert.ToInt32(userId),
+                TotalAmount = cart.TotalAmount,
+                Status = OrderStatus.Pending,
+                ShippingAddressId =dto.ShippingAddressId
             };
 
-            if (dto.ItemIdQuantity !=null)
+            var transaction = new Transaction
             {
+                Order = order,
+                RazorPageTransactionID=dto.RazorPageTransactionID,
+                Method=dto.Method,
+                Remarks = dto.Remarks,
+            };
 
-                foreach (var item in dto.ItemIdQuantity)
-                {
-                    var orderItem = new OrderItemQuantity
-                    {
-                        Order = order,
-                        ItemId = item.Key,
-                        Quantity = item.Value
-                    };
-                }
-            }
+            _dbContext.Orders.Add(order);
+            _dbContext.Transactions.Add(transaction);
 
-            return Ok();
+            _dbContext.SaveChanges();
+
+            return Ok("Oder Created Succesfully ");
         }
     }
 }

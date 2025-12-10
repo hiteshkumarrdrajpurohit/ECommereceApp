@@ -19,6 +19,7 @@ namespace EcommerceApp
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
 
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -35,11 +36,13 @@ namespace EcommerceApp
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId);
 
-            // ORDER → ORDER ITEM QUANTITY (1:M)
+
+            // ORDER → TRANSACTION (1:1)
             modelBuilder.Entity<Order>()
-                .HasMany(o => o.OrderItemQuantity)
-                .WithOne(oiq => oiq.Order)
-                .HasForeignKey(oiq => oiq.OrderId);
+                .HasOne(o => o.Transaction)
+                .WithOne(t => t.Order)
+                .HasForeignKey<Transaction>(t => t.OrderId);
+
 
             // ITEM → ORDER ITEM QUANTITY (1:M)
             modelBuilder.Entity<OrderItemQuantity>()
@@ -53,11 +56,6 @@ namespace EcommerceApp
                 .WithOne(inv => inv.Item)
                 .HasForeignKey<Inventory>(inv => inv.ItemId);
 
-            // ORDER → TRANSACTION (1:M)
-            modelBuilder.Entity<Transaction>()
-                .HasOne(t => t.Order)
-                .WithMany(o => o.Transactions)
-                .HasForeignKey(t => t.OrderId);
 
             // ORDER → SHIPPING ADDRESS (M:1)
             modelBuilder.Entity<Order>()
@@ -74,7 +72,11 @@ namespace EcommerceApp
                 .Property(o => o.TotalAmount)
                 .HasPrecision(18, 2);
 
-            
+
+            modelBuilder.Entity<Cart>()
+                .Property(o => o.TotalAmount)
+                .HasPrecision(18, 2);
+
             // USER ↔ CART (1:1)
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Cart)
