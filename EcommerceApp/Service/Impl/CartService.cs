@@ -60,11 +60,11 @@ namespace EcommerceApp.Service.Impl
                 {
                     ItemId = itemId,
                     Quantity = quantity,
-                    UnitPrice = item.Price
+             
                 });
             }
 
-            cart.TotalAmount = cart.Items.Sum(ci => ci.Quantity * ci.UnitPrice);
+            cart.TotalAmount = cart.Items.Sum(ci => ci.Quantity * ci.Item.Price);
 
             await _db.SaveChangesAsync();
         }
@@ -103,7 +103,7 @@ namespace EcommerceApp.Service.Impl
             if (cart == null)
                 return 0;
 
-            cart.TotalAmount = cart.Items.Sum(ci => ci.Quantity * ci.UnitPrice);
+            cart.TotalAmount = cart.Items.Sum(ci => ci.Quantity * ci.Item.Price);
             await _db.SaveChangesAsync();
 
             return cart.TotalAmount;

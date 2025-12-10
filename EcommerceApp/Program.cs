@@ -1,4 +1,5 @@
 ﻿using EcommerceApp.Service;
+using EcommerceApp.Service.Impl;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -18,8 +19,12 @@ namespace EcommerceApp
             //   options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add services to the container.
+
+        
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            
 
             builder.Services.AddAuthentication(options =>
             {
@@ -47,7 +52,7 @@ namespace EcommerceApp
             });
 
             builder.Services.AddSingleton<ITokenService, TokenService>();
-
+            builder.Services.AddScoped<ICartService, CartService>();
            
 
             builder.Services.AddControllers();

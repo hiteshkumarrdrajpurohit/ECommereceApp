@@ -29,7 +29,7 @@ namespace EcommerceApp.Controllers
 
             var order = new Order
             {
-                UserInfo = user,
+                User = user,
                 ShippingAddressId = dto.ShippingAddressId,
                 TotalAmount = dto.TotalAmount,
                 OrderItemQuantity = orderItems,

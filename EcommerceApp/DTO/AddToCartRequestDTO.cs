@@ -1,6 +1,6 @@
 ﻿namespace EcommerceApp.DTO
 {
-    public class AddToCartRequest
+    public class AddToCartRequestDTO
     {
         public int UserId { get; set; }
         public int ItemId { get; set; }

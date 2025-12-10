@@ -24,7 +24,7 @@ namespace EcommerceApp.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> AddToCart([FromBody] AddToCartRequest request)
+        public async Task<IActionResult> AddToCart([FromBody] AddToCartRequestDTO request)
         {
             await _cartService.AddToCartAsync(request.UserId, request.ItemId, request.Quantity);
             return Ok("Item added to cart");

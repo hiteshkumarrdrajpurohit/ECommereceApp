@@ -1,5 +1,6 @@
 ﻿using EcommerceApp.Enum;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EcommerceApp.Model
 {
@@ -22,6 +23,7 @@ namespace EcommerceApp.Model
         //Navigation
         public ICollection<Order>? Orders { get; set; }
         public ICollection<Address>? Addresses { get; set; }
+        [JsonIgnore]
         public Cart? Cart { get; set; }
     }
 }
