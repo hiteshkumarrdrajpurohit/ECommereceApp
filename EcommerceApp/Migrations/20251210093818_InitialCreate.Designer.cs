@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcommerceApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251209130210_InitialCreate")]
+    [Migration("20251210093818_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -62,6 +62,10 @@ namespace EcommerceApp.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -97,6 +101,7 @@ namespace EcommerceApp.Migrations
                         .HasColumnType("bit");
 
                     b.Property<decimal>("TotalAmount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -255,6 +260,9 @@ namespace EcommerceApp.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("TransactionId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -325,6 +333,10 @@ namespace EcommerceApp.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<string>("RazorPageTransactionID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Remarks")
                         .HasColumnType("nvarchar(max)");
 
@@ -336,7 +348,8 @@ namespace EcommerceApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .IsUnique();
 
                     b.ToTable("Transactions");
                 });
@@ -470,7 +483,7 @@ namespace EcommerceApp.Migrations
                         .IsRequired();
 
                     b.HasOne("EcommerceApp.Model.Order", "Order")
-                        .WithMany("OrderItemQuantity")
+                        .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -483,8 +496,8 @@ namespace EcommerceApp.Migrations
             modelBuilder.Entity("EcommerceApp.Model.Transaction", b =>
                 {
                     b.HasOne("EcommerceApp.Model.Order", "Order")
-                        .WithMany("Transactions")
-                        .HasForeignKey("OrderId")
+                        .WithOne("Transaction")
+                        .HasForeignKey("EcommerceApp.Model.Transaction", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -503,9 +516,7 @@ namespace EcommerceApp.Migrations
 
             modelBuilder.Entity("EcommerceApp.Model.Order", b =>
                 {
-                    b.Navigation("OrderItemQuantity");
-
-                    b.Navigation("Transactions");
+                    b.Navigation("Transaction");
                 });
 
             modelBuilder.Entity("EcommerceApp.Model.User", b =>

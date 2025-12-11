@@ -59,6 +59,7 @@ namespace EcommerceApp.Service.Impl
                 cart.Items.Add(new CartItem
                 {
                     ItemId = itemId,
+                    Item = item,
                     Quantity = quantity,
              
                 });
