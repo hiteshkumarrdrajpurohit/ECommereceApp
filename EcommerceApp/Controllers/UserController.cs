@@ -17,14 +17,14 @@ namespace EcommerceApp.Controllers
         private  readonly ApplicationDbContext _dbContext;
         private readonly PasswordHasher<User> _passwordHasher =new PasswordHasher<User>();
 
-
+      
         public UserController(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         [HttpPost("changePassword")]
-        public IActionResult ChangePassword(ChangePasswordDTO dto)
+        public IActionResult ChangePassword( [FromBody] ChangePasswordDTO dto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -69,6 +69,36 @@ namespace EcommerceApp.Controllers
                 });
 
         }
+
+        [HttpPost("address")]
+
+        public IActionResult AddAddress([FromBody]AddressDTO dto)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return Unauthorized();
+
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id.ToString() == userId && u.IsActive == true);
+            if (user == null) return Unauthorized("User Not Found");
+            var address = new Address
+            {
+                Name = dto.Name,
+                Phone = dto.Phone,
+                Street = dto.Street,
+                City = dto.City,
+                State = dto.State,
+                PostalCode = dto.PostalCode,
+                Country = dto.Country
+            };
+
+            address.Users.Add(user);
+            user.Addresses.Add(address);
+
+            _dbContext.SaveChanges();
+            return Ok(address);
+
+        }
+
+
 
 
     }

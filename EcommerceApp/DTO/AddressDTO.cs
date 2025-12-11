@@ -1,19 +1,27 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace EcommerceApp.Model
+namespace EcommerceApp.DTO
 {
-    public class Address : Base
+    public class AddressDTO
     {
+        [Required]
         public string Name { get; set; } = string.Empty;
-        public string Phone { get; set; } = string.Empty;
-
+         
+        [Required]
+        public string Phone {  get; set; } =string.Empty;
+        [Required]
         public string Street { get; set; } = string.Empty;
+        
+        [Required] 
         public string City { get; set; } = string.Empty;
+        
+        [Required] 
         public string State { get; set; } = string.Empty;
+  
+        [Required] 
         public string PostalCode { get; set; } = string.Empty;
+        
+        [Required] 
         public string Country { get; set; } = string.Empty;
-
-        [JsonIgnore]
-        public ICollection<User>? Users { get; set; } = new List<User>();
     }
 }
