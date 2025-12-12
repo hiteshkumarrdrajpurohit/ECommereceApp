@@ -27,7 +27,10 @@ namespace EcommerceApp.Controllers
 
             
 
-            var cart = _dbContext.Carts.FirstOrDefault( c => Convert.ToInt32(c.UserId) == Convert.ToInt32(userId) );
+            var cart = _dbContext
+                       .Carts
+                       .Include( c => c.Items)
+                       .FirstOrDefault( c => Convert.ToInt32(c.UserId) == Convert.ToInt32(userId) );
 
             var shippingAddress = _dbContext.Addresses.FirstOrDefault( c => c.Id == dto.ShippingAddressId);
 
@@ -52,7 +55,7 @@ namespace EcommerceApp.Controllers
 
             _dbContext.Orders.Add(order);
             _dbContext.Transactions.Add(transaction);
-
+            cart.Items.Clear();
             _dbContext.SaveChanges();
 
 
