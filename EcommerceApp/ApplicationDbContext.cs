@@ -18,6 +18,7 @@ namespace EcommerceApp
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+    
 
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,13 +43,6 @@ namespace EcommerceApp
                 .HasOne(o => o.Transaction)
                 .WithOne(t => t.Order)
                 .HasForeignKey<Transaction>(t => t.OrderId);
-
-
-            // ITEM → ORDER ITEM QUANTITY (1:M)
-            modelBuilder.Entity<OrderItemQuantity>()
-                .HasOne(oiq => oiq.Item)
-                .WithMany()
-                .HasForeignKey(oiq => oiq.ItemId);
 
             // ITEM → INVENTORY (1:1)
             modelBuilder.Entity<Item>()

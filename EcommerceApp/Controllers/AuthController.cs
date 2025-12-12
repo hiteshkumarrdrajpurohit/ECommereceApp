@@ -5,6 +5,7 @@ using EcommerceApp.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using System.Security.Claims;
 
 namespace EcommerceApp.Controllers
 {
@@ -73,12 +74,15 @@ namespace EcommerceApp.Controllers
             var user = _dbContext.Users.SingleOrDefault(u => u.Email == dto.Email && u.IsActive==true);
             if (user == null) return Unauthorized(new { message = "Invalid email or password" });
 
+
+
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
 
             if(result == PasswordVerificationResult.Failed) return Unauthorized(new { message = "Invalid email or password" });
 
             var token = _tokenService.CreateToken(user);
 
+        
             return Ok(new
             {
                 message = "Login successful",
