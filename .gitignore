@@ -1,6 +1,9 @@
 # Ignore Visual Studio files
 .vs/
 
+FrontEnd/ecommerce_frontend/node_modules/
+
+
 # Ignore build results
 [Bb]in/
 [Oo]bj/
@@ -12,7 +15,7 @@
 # Ignore logs
 *.log
 
-EcommerceApp.Database/Migrations/
+EcommerceApp/Migrations/
 
 # Ignore NuGet packages
 *.nupkg
