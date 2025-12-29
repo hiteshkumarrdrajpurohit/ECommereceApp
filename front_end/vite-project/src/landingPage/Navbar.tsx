@@ -1,5 +1,6 @@
 import React from "react";
 import logo3 from "../assets/Copilot_20251219_182204 (1).png"
+import { NavLink } from "react-router-dom";
 const Navbar: React.FC = () => {
   return (
     <nav className="bg-black text-white px-6 py-4 shadow-md">
@@ -13,10 +14,10 @@ const Navbar: React.FC = () => {
 
         {/* Navigation Links */}
         <ul className="hidden md:flex space-x-6">
-          <li><a href="#about" className="hover:text-yellow-400 transition">About</a></li>
-          <li><a href="#contact" className="hover:text-yellow-400 transition">Contact Us</a></li>
-          <li><a href="#signin" className="hover:text-yellow-400 transition">Sign In</a></li>
-          <li><a href="#register" className="hover:text-yellow-400 transition">Register</a></li>
+          <li><NavLink to="/" className="hover:text-yellow-400 transition">About</NavLink></li>
+          <li><NavLink to="#" className="hover:text-yellow-400 transition">Contact Us</NavLink></li>
+          <li><NavLink to="/signin" className="hover:text-yellow-400 transition">Sign In</NavLink></li>
+          <li><NavLink to="/signup" className="hover:text-yellow-400 transition">SignUp</NavLink></li>
         </ul>
 
         {/* Mobile Menu Button */}

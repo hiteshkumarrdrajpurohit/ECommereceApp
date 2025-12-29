@@ -6,7 +6,9 @@ function LandingPage() {
   return (
   <>
    <Navbar/>
-   <LandingBody/>
+  
+    <LandingBody/>
+ 
    <DefaultFooter/>
   </>
   )

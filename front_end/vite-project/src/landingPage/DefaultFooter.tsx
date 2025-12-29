@@ -1,12 +1,12 @@
 import React from "react";
 const DefaultFooter: React.FC = () => {
   return (
-    // Change bg-brand.black to bg-brand-black, text-brand.white to text-brand-white
+    
     <footer className="bg-brand-black text-brand-white py-10"> 
       <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Brand Section */}
         <div>
-          {/* Change text-brand.yellow to text-brand-yellow */}
+      
           <h2 className="text-2xl font-bold text-brand-yellow">AnantaMall</h2> 
           <p className="mt-2 text-sm text-gray-300">
             Your eternal marketplace for modern shopping.
@@ -14,10 +14,10 @@ const DefaultFooter: React.FC = () => {
         </div>
         {/* Navigation Links */}
         <div>
-          {/* Change text-brand.yellow to text-brand-yellow */}
+       
           <h3 className="text-lg font-semibold mb-4 text-brand-yellow">Quick Links</h3> 
           <ul className="space-y-2">
-            {/* Change hover:text-brand.yellow to hover:text-brand-yellow */}
+          
             <li><a href="#about" className="hover:text-brand-yellow">About</a></li> 
             <li><a href="#contact" className="hover:text-brand-yellow">Contact Us</a></li>
             <li><a href="#signin" className="hover:text-brand-yellow">Sign In</a></li>
@@ -26,10 +26,10 @@ const DefaultFooter: React.FC = () => {
         </div>
         {/* Social Media */}
         <div>
-          {/* Change text-brand.yellow to text-brand-yellow */}
+        
           <h3 className="text-lg font-semibold mb-4 text-brand-yellow">Follow Us</h3> 
           <div className="flex space-x-4">
-            {/* Change hover:text-brand.yellow to hover:text-brand-yellow */}
+          
             <a href="#" className="hover:text-brand-yellow"> 
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">...</svg>
             </a>
@@ -43,7 +43,7 @@ const DefaultFooter: React.FC = () => {
         </div>
       </div>
       {/* Bottom Bar */}
-      {/* Change border-brand.yellow to border-brand-yellow */}
+   
       <div className="mt-8 border-t border-brand-yellow pt-4 text-center text-sm text-gray-400"> 
         © {new Date().getFullYear()} AnantaMall. All rights reserved.
       </div>

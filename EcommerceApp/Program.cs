@@ -20,6 +20,17 @@ namespace EcommerceApp
 
             // Add services to the container.
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReact",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:5173")
+                        .AllowAnyheader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                    });
+            });
         
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -105,6 +116,7 @@ namespace EcommerceApp
             //}
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.UseCors("AllowReact");
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
